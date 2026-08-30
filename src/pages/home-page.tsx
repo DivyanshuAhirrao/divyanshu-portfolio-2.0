@@ -1,33 +1,17 @@
-import { Suspense, lazy } from "react";
-
 import { Preloader } from "@/components/layout/preloader";
 import { SiteHeader } from "@/components/layout/site-header";
-import { SectionFallback } from "@/components/layout/section-fallback";
+import { AboutSection } from "@/features/about";
+import { ContactSection } from "@/features/contact";
+import { ExperienceSection } from "@/features/experience";
+import { ExpertiseSection } from "@/features/expertise";
 import { HeroSection } from "@/features/hero";
 import { MarqueeStrip } from "@/features/marquee";
+import { MetricsSection } from "@/features/metrics";
+import { NameSection } from "@/features/name";
+import { WorkSection } from "@/features/work";
 import { useReveal } from "@/hooks/motion/use-reveal";
 
-// Below-the-fold sections are code-split: SSR still streams their HTML (so the
-// content stays crawlable) while the client downloads them after the hero.
-const WorkSection = lazy(() => import("@/features/work").then((m) => ({ default: m.WorkSection })));
-const AboutSection = lazy(() =>
-  import("@/features/about").then((m) => ({ default: m.AboutSection })),
-);
-const MetricsSection = lazy(() =>
-  import("@/features/metrics").then((m) => ({ default: m.MetricsSection })),
-);
-const ExpertiseSection = lazy(() =>
-  import("@/features/expertise").then((m) => ({ default: m.ExpertiseSection })),
-);
-const ExperienceSection = lazy(() =>
-  import("@/features/experience").then((m) => ({ default: m.ExperienceSection })),
-);
-const NameSection = lazy(() => import("@/features/name").then((m) => ({ default: m.NameSection })));
-const ContactSection = lazy(() =>
-  import("@/features/contact").then((m) => ({ default: m.ContactSection })),
-);
-
-/** Composes the single-page portfolio: eager hero, streamed sections below. */
+/** Composes the single-page portfolio. */
 export function HomePage() {
   const ref = useReveal<HTMLDivElement>();
 
@@ -38,27 +22,13 @@ export function HomePage() {
       <main>
         <HeroSection />
         <MarqueeStrip />
-        <Suspense fallback={<SectionFallback h={900} />}>
-          <WorkSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback h={700} />}>
-          <AboutSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback h={320} />}>
-          <MetricsSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback h={620} />}>
-          <ExpertiseSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback h={520} />}>
-          <ExperienceSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback h={480} />}>
-          <NameSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback h={720} />}>
-          <ContactSection />
-        </Suspense>
+        <WorkSection />
+        <AboutSection />
+        <MetricsSection />
+        <ExpertiseSection />
+        <ExperienceSection />
+        <NameSection />
+        <ContactSection />
       </main>
     </div>
   );
