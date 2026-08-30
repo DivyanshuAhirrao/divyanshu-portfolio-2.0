@@ -13,7 +13,7 @@ export const contact: Contact = {
 export const site = {
   name: "Divyanshu Ahirrao",
   role: "Full-Stack Software Engineer",
-  title: "Divyanshu Ahirrao — Full-Stack Software Engineer",
+  title: "Divyanshu Ahirrao | Portfolio",
   description:
     "Divyanshu Ahirrao builds production web, mobile and AI systems end to end — interfaces, services and the pipelines that ship them. Selected work, expertise and experience.",
   keywords:
