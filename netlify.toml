@@ -1,15 +1,18 @@
 [build]
   command = "npm run build"
-  publish = "dist/client"
+  publish = "dist"
 
-[functions]
-  directory = ".netlify/v1/functions"
+# No [functions] block: Nitro's "netlify" preset writes its serverless function
+# to .netlify/functions-internal, which is Nitro's own generated/internal path,
+# not something to point Netlify at manually. Netlify auto-detects Nitro output
+# and wires the function correctly on its own — pointing [functions].directory
+# at the wrong path (verified against a real local build) is what caused the
+# "Deploy directory does not exist" failure alongside the dist/client typo.
 
-# Nitro's "netlify" preset already writes redirect rules into dist/client/_redirects
-# during build (routing static assets directly, everything else to the SSR function).
-# This file's only job is to tell Netlify how to build and where the static
-# output lives — do not add a catch-all redirect here, it would fight the
-# generated _redirects file and can serve stale/static HTML instead of SSR output.
+# Nitro's "netlify" preset writes redirect rules into dist/_redirects during
+# build (routing static assets directly, everything else to the SSR function).
+# Do not add a catch-all redirect here — it would fight the generated
+# _redirects file and can serve stale/static HTML instead of SSR output.
 
 [build.environment]
   # nitro@3 (beta, currently pinned in package.json) requires ^20.19.0 || >=22.12.0.
