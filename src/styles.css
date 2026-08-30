@@ -97,6 +97,39 @@
   color-scheme: light;
 }
 
+[data-scroll-mode="native"] {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+[data-scroll-mode="native"]::-webkit-scrollbar {
+  display: none;
+}
+
+.project-link-label {
+  position: relative;
+  padding-bottom: 3px;
+}
+
+.project-link-label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: var(--color-signal);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-link:hover .project-link-label::after,
+.project-link:focus-visible .project-link-label::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
 @layer base {
   * {
     border-color: var(--color-border);

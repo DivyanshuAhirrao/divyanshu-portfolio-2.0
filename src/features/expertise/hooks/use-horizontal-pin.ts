@@ -6,9 +6,15 @@ import { useEffect, useRef } from "react";
  * the initial bundle stay untouched. Falls back to native horizontal swiping when
  * motion is reduced or GSAP is unavailable.
  */
-export function useHorizontalPin<T extends HTMLElement = HTMLDivElement>() {
+export function useHorizontalPin<T extends HTMLElement = HTMLDivElement>(
+  onProgress?: (progress: number) => void,
+) {
   const pinRef = useRef<T | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const ghostRef = useRef<HTMLDivElement | null>(null);
+  const barRef = useRef<HTMLDivElement | null>(null);
+  const onProgressRef = useRef(onProgress);
+  onProgressRef.current = onProgress;
 
   useEffect(() => {
     const pin = pinRef.current;
@@ -18,9 +24,7 @@ export function useHorizontalPin<T extends HTMLElement = HTMLDivElement>() {
     let disposed = false;
     let cleanup: (() => void) | undefined;
 
-    const reduced =
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      document.documentElement.dataset["motion"] === "subtle";
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reduced) {
       // No pinning: the track stays natively swipeable inside its own overflow box.
@@ -38,7 +42,10 @@ export function useHorizontalPin<T extends HTMLElement = HTMLDivElement>() {
       gsap.registerPlugin(ScrollTrigger);
 
       const ctx = gsap.context(() => {
-        const distance = () => Math.max(0, track.scrollWidth - pin.clientWidth);
+        const viewport = track.parentElement;
+        const distance = () => Math.max(0, track.scrollWidth - (viewport?.clientWidth ?? 0));
+        const ghost = ghostRef.current;
+        const bar = barRef.current;
 
         gsap.to(track, {
           x: () => -distance(),
@@ -53,8 +60,49 @@ export function useHorizontalPin<T extends HTMLElement = HTMLDivElement>() {
             anticipatePin: 1,
             scrub: 1,
             invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              onProgressRef.current?.(self.progress);
+              if (bar) bar.style.transform = `scaleX(${self.progress})`;
+            },
           },
         });
+
+        // Giant background word drifts slower than the cards for parallax depth.
+        if (ghost) {
+          const getGhostDistance = () => {
+            const viewportWidth = viewport?.clientWidth ?? window.innerWidth;
+
+            return Math.max(0, ghost.scrollWidth - viewportWidth);
+          };
+
+          const getGhostStart = () => {
+            if (window.innerWidth < 768) {
+              // Mobile: show roughly the last 2–3 letters initially.
+              return -getGhostDistance() + 40;
+            }
+
+            // Desktop: start from the beginning.
+            return 0;
+          };
+
+          gsap.fromTo(
+            ghost,
+            {
+              x: getGhostStart,
+            },
+            {
+              x: () => (window.innerWidth < 768 ? 0 : distance() * 0.6),
+              ease: "none",
+              scrollTrigger: {
+                trigger: pin,
+                start: "top top",
+                end: () => `+=${distance()}`,
+                scrub: 0.5,
+                invalidateOnRefresh: true,
+              },
+            },
+          );
+        }
       }, pin);
 
       const refresh = () => ScrollTrigger.refresh();
@@ -72,5 +120,5 @@ export function useHorizontalPin<T extends HTMLElement = HTMLDivElement>() {
     };
   }, []);
 
-  return { pinRef, trackRef };
+  return { pinRef, trackRef, ghostRef, barRef };
 }
