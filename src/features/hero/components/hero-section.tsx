@@ -26,12 +26,12 @@ export function HeroSection() {
             <span className="mask-line [&>span]:[animation-delay:1300ms]">
               <span className="whitespace-nowrap">Software that makes</span>
             </span>
-            <span className="mask-line [&>span]:[animation-delay:1400ms]">
+            <span className="mask-line [&>span]:[animation-delay:1400ms] py-1">
               <span className="whitespace-nowrap">
                 teams say <em className="not-italic text-signal">“yes”</em>
               </span>
             </span>
-            <span className="mask-line [&>span]:[animation-delay:1500ms]">
+            <span className="mask-line [&>span]:[animation-delay:1500ms] py-1">
               <span className="whitespace-nowrap text-dim">before the demo ends.</span>
             </span>
           </h1>
@@ -49,7 +49,9 @@ export function HeroSection() {
                 className="group inline-flex items-center gap-3 bg-signal px-6 py-3.5 font-mono text-[10px] uppercase tracking-[0.22em] text-signal-foreground transition-colors hover:bg-ink"
               >
                 See selected work
-                <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                <span className="transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
               </a>
               <a
                 href={`mailto:${contact.email}`}
@@ -65,9 +67,7 @@ export function HeroSection() {
               <div key={item.label} className="bg-canvas p-5">
                 <div className="label mb-3">{item.label}</div>
                 <div className="flex items-center gap-2 font-display text-sm uppercase text-ink">
-                  {item.dot ? (
-                    <span className="h-1.5 w-1.5 animate-pulse bg-signal" />
-                  ) : null}
+                  {item.dot ? <span className="h-1.5 w-1.5 animate-pulse bg-signal" /> : null}
                   {item.value}
                 </div>
               </div>

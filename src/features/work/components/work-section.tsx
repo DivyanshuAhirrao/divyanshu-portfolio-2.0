@@ -1,5 +1,6 @@
 import { projects } from "@/data";
 import { caseFileLabel } from "@/data/transforms";
+import { ProjectLink } from "./project-link";
 
 export function WorkSection() {
   return (
@@ -16,11 +17,10 @@ export function WorkSection() {
 
         <div className="border-t border-line" data-reveal-stagger="110">
           {projects.map((project) => (
-            <a
+            <article
               key={project.id}
-              href="#contact"
               data-reveal="left"
-              className="row-link reveal group grid items-center gap-6 border-b border-line px-2 py-8 md:grid-cols-12 lg:py-10"
+              className="row-link reveal group grid items-start gap-6 border-b border-line px-2 py-8 md:grid-cols-12 lg:py-10"
             >
               <span className="font-mono text-[11px] text-signal md:col-span-1">{project.id}</span>
 
@@ -31,7 +31,19 @@ export function WorkSection() {
                 <div className="label mt-2">{project.meta}</div>
               </div>
 
-              <p className="text-sm leading-relaxed text-dim md:col-span-3">{project.tagline}</p>
+              <div className="space-y-3 md:col-span-3">
+                <p className="text-sm leading-relaxed text-dim">{project.tagline}</p>
+                {project.bullets && project.bullets.length > 0 && (
+                  <ul className="space-y-1.5">
+                    {project.bullets.map((bullet, i) => (
+                      <li key={i} className="flex gap-2 text-xs leading-relaxed text-dim/80">
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-signal" />
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
 
               <div className="hidden grid-cols-3 gap-px border border-line bg-line md:col-span-3 md:grid">
                 {project.stats.map((stat) => (
@@ -42,17 +54,20 @@ export function WorkSection() {
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-2 md:col-span-11 md:col-start-2">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="border border-line px-3 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-dim"
-                  >
-                    {tag}
-                  </span>
-                ))}
+              <div className="flex flex-wrap items-center justify-between gap-4 md:col-span-11 md:col-start-2">
+                <div className="flex flex-wrap gap-2">
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="border border-line px-3 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-dim"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <ProjectLink project={project} />
               </div>
-            </a>
+            </article>
           ))}
         </div>
       </div>

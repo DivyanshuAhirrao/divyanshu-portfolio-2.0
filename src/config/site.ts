@@ -2,10 +2,10 @@ import type { Contact } from "@/data/types";
 
 /** Owner identity + contact channels used across header, hero, contact and SEO. */
 export const contact: Contact = {
-  email: "hello@divyanshuahirrao.com",
-  github: "/divyanshuahirrao",
+  email: "divyanshu16.work@gmail.com",
+  github: "DivyanshuAhirrao",
   githubUrl: "https://github.com/divyanshuahirrao",
-  linkedin: "/divyanshu-ahirrao",
+  linkedin: "divyanshu-ahirrao-038537245",
   linkedinUrl: "https://www.linkedin.com/in/divyanshu-ahirrao-038537245",
   location: "India · IST · Remote friendly",
 };
