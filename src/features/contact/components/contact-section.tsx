@@ -1,5 +1,13 @@
 import { contact } from "@/config/site";
 
+// Computed once at module load (build/first-import time), not per render, so
+// the value is identical on the server-rendered HTML and the client's first
+// hydration pass — avoids React error #418 (server/client HTML mismatch).
+// Long-lived cached SSR responses could still show a stale year until the
+// next deploy/rebuild; that's an acceptable, purely cosmetic trade-off for a
+// footer copyright line versus reintroducing a render-time Date() call.
+const COPYRIGHT_YEAR = new Date().getFullYear();
+
 const rows = [
   { label: "Email", value: contact.email, href: `mailto:${contact.email}` },
   { label: "GitHub", value: contact.github, href: contact.githubUrl },
@@ -35,7 +43,11 @@ export function ContactSection() {
             </a>
           </div>
 
-          <div className="reveal md:col-span-5" data-reveal="right" style={{ transitionDelay: "140ms" }}>
+          <div
+            className="reveal md:col-span-5"
+            data-reveal="right"
+            style={{ transitionDelay: "140ms" }}
+          >
             <div className="border-t border-line">
               {rows.map((row) =>
                 row.href ? (
@@ -67,7 +79,7 @@ export function ContactSection() {
 
         <div className="mt-20 overflow-hidden border-t border-line pt-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <span className="label">© {new Date().getFullYear()} Divyanshu Ahirrao</span>
+            <span className="label">© {COPYRIGHT_YEAR} Divyanshu Ahirrao</span>
             <span className="label flex items-center gap-2">
               <span className="h-1.5 w-1.5 bg-signal" />
               Engineered, not templated
